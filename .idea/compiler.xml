@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CabBookingService" />
         <module name="MultiLevelCache" />
-        <module name="Parkinglot" />
         <module name="Patterns" />
         <module name="concurrency" />
         <module name="Cache" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Parkinglot" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
