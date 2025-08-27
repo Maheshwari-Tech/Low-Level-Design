@@ -2,8 +2,6 @@ package com.mycompany.app.policies;
 
 public class RandomEvictionPolicy<Key> implements EvictionPolicy<Key> {
 
-    int size = 0;
-
     @Override
     public Key keyToEvict() {
         return null;
