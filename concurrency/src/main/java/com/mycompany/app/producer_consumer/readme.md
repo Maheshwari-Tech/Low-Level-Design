@@ -1,4 +1,3 @@
-
 ## Blocking Queue | Bounded Buffer | Producer Consumer 
 
 * Classical synchronization problem involving a limited size buffer which can have items added to it or

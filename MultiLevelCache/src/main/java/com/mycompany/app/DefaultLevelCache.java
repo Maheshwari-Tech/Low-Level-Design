@@ -5,14 +5,13 @@ import com.mycompany.app.models.ReadResponse;
 import com.mycompany.app.models.UsageResponse;
 import com.mycompany.app.models.WriteResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultLevelCache<Key, Value> implements ILevelCache<Key, Value>{
     LevelCacheData levelCacheData;
 
-    DefaultLevelCache(LevelCacheData levelCacheData, Cache<Key, Value> cache, ILevelCache<Key, Value> next){
-        this.levelCacheData = levelCacheData;
+    public DefaultLevelCache(int readTime, int writeTime, int capacity, Cache<Key, Value> cache, ILevelCache<Key, Value> next){
+        this.levelCacheData = new LevelCacheData(readTime, writeTime, capacity);
         this.cache = cache;
         this.next = next;
     }

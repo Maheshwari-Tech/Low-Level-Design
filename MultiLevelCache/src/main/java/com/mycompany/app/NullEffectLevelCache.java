@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NullEffectLevelCache<Key, Value> implements ILevelCache<Key, Value>{
+
     @Override
     public ReadResponse<Value> read(Key key) {
         return new ReadResponse<>(null,0.0);

@@ -43,6 +43,6 @@ public class CacheImpl<Key, Value> implements Cache<Key, Value> {
 
     @Override
     public int size() {
-        return storage.size();
+        return storage.getSize();
     }
 }
