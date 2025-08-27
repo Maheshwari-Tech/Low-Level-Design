@@ -13,6 +13,7 @@
         <module>CabBookingService</module>
         <module>Cache</module>
         <module>MultiLevelCache</module>
+        <module>Patterns</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

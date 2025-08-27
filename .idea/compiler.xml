@@ -9,6 +9,7 @@
         <module name="CabBookingService" />
         <module name="MultiLevelCache" />
         <module name="Parkinglot" />
+        <module name="Patterns" />
         <module name="concurrency" />
         <module name="Cache" />
       </profile>
