@@ -1,11 +1,3 @@
-1. Cache - LRU, LFU, RandomEvictionPolicy
-2. Producer-Consumer Problem
-3. MultiLevel Cache
-4. Design Uber
-5. Parking Lot
-
-
-# Low Level Design
 
 1. Oops Fundamentals (C++, Java, Python)
 2. Solid Principles
