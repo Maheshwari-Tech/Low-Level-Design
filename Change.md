@@ -16,11 +16,18 @@
 
 ## September 2025
 
-1. Parking Lot - [Complete]
-2. Elevator 
-3. Barber Shop 
+1. Elevator 
+2. Barber Shop 
+3. 
 4. Dining Philosopher
 5. Barrier 
 6. Design file system 
+7. Design Chess Game 
+8. Meeting Scheduler 
+9. Car Rental 
+10. Online Stock Brokerage
+
+
+## October 2025
 
 

@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CabBookingService" />
         <module name="MultiLevelCache" />
+        <module name="TicketMaster" />
         <module name="Patterns" />
         <module name="concurrency" />
         <module name="Cache" />

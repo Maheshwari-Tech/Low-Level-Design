@@ -13,6 +13,7 @@
         <module>Cache</module>
         <module>MultiLevelCache</module>
         <module>Patterns</module>
+        <module>TicketMaster</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
