@@ -5,11 +5,11 @@
 1. Cache - LRU, LFU, RandomEvictionPolicy - [Completed]
 2. Producer-Consumer Problem - [Completed]
 3. MultiLevel Cache - [Completed]
-4. Design Uber -[half Completed]
-5. Parking Lot - [half Completed]
-6. Unisex bathroom problem - [Completed]
-7. TicketMaster - [half Completed]
-8. Singleton Design Pattern 
+4. Unisex bathroom problem - [Completed]
+5. Singleton Design Pattern 
+6. Design Uber -[half Completed]
+7. Parking Lot - [half Completed]
+8. TicketMaster - [half Completed]
 9. Rate Limiter 
 10. Locker Management System
 

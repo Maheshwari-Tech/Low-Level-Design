@@ -25,7 +25,7 @@ public class BlockingQueueWithSemaphoreImpl<T> implements BockingQueue<T> {
 
     }
 
-    public  void enqueue(T item) throws InterruptedException {
+    public void enqueue(T item) throws InterruptedException {
         semProducer.acquire();
         semLock.acquire();
 
