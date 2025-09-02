@@ -11,6 +11,7 @@
         <module name="eCommerce" />
         <module name="TicketMaster" />
         <module name="Patterns" />
+        <module name="LoggingSystem" />
         <module name="concurrency" />
         <module name="Cache" />
       </profile>
