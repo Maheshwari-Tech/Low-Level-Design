@@ -9,6 +9,8 @@
         <module name="CabBookingService" />
         <module name="MultiLevelCache" />
         <module name="eCommerce" />
+        <module name="OnlineAuctionSystem" />
+        <module name="FileSystem" />
         <module name="TicketMaster" />
         <module name="Patterns" />
         <module name="LoggingSystem" />
@@ -17,7 +19,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="FileSystem" target="17" />
+      <module name="OnlineAuctionSystem" target="17" />
       <module name="Parkinglot" target="21" />
     </bytecodeTargetLevel>
   </component>
