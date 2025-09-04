@@ -18,7 +18,7 @@
 
 1. Elevator 
 2. Barber Shop 
-3. 
+3. Design Patterns
 4. Dining Philosopher
 5. Barrier 
 6. Design file system 
@@ -29,5 +29,12 @@
 
 
 ## October 2025
+
+
+## References - 
+1. Concept and coding
+2. Educative.io 
+3. Udit Agarwal 
+4. 
 
 

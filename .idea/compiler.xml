@@ -17,6 +17,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="FileSystem" target="17" />
       <module name="Parkinglot" target="21" />
     </bytecodeTargetLevel>
   </component>
