@@ -1,0 +1,78 @@
+:root {
+  font-family: Inter, system-ui;
+  color: #201a2b;
+  background: #f7f3fa;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+main {
+  width: min(700px, calc(100% - 32px));
+  margin: 48px auto;
+}
+.eyebrow {
+  color: #7c3aed;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  font-weight: 800;
+}
+h1 {
+  font-size: 48px;
+  margin: 5px 0 24px;
+}
+section {
+  background: white;
+  padding: 26px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px #32145815;
+}
+select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd6e7;
+  border-radius: 8px;
+}
+.screen {
+  text-align: center;
+  margin: 26px auto;
+  color: #7c3aed;
+  border-top: 5px solid #c4b5fd;
+  padding-top: 7px;
+}
+.seats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 9px;
+}
+.seats button,
+.book {
+  border: 0;
+  border-radius: 7px;
+  padding: 10px;
+  cursor: pointer;
+}
+.available {
+  background: #dcfce7;
+}
+.booked,
+.held {
+  background: #e2e8f0;
+}
+.seats .selected,
+.book {
+  background: #7c3aed;
+  color: white;
+}
+.book {
+  margin-top: 20px;
+}
+.notice {
+  padding: 12px;
+  background: #f5f3ff;
+  color: #5b21b6;
+  border-radius: 8px;
+}

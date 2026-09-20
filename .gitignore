@@ -1,11 +1,23 @@
+# Compiled class files
+*.class
+
+# Target directories
 target/
 **/target/
+.pnpm-store/
 
+# IDE files
 .idea/
 *.iml
 *.ipr
 *.iws
+.vscode/
 out/
 
+# Python test/runtime caches
+__pycache__/
+*.py[cod]
 
-
+# OS files
+.DS_Store
+Thumbs.db
