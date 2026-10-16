@@ -1,12 +1,17 @@
-from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 from threading import Barrier
 
 import pytest
 
-from app.application import BookingService
-from app.domain import HoldExpiredError, NotFoundError, SeatUnavailableError
-from app.infrastructure import InMemoryBookingRepository
+from app.exceptions.booking_exceptions import (
+    HoldExpiredError,
+    HoldNotFoundError,
+    SeatUnavailableError,
+)
+from app.models.enums import SeatStatus
+from app.repositories.in_memory_booking_repository import InMemoryBookingRepository
+from app.services.booking_service import BookingService
 
 NOW = datetime(2026, 9, 20, tzinfo=timezone.utc)
 
@@ -21,6 +26,20 @@ def test_hold_then_confirm_books_seats():
     booking = bookings.confirm_booking("show-1", hold.id, "Ada Lovelace")
     assert booking.seats == frozenset({"A1", "A2"})
     assert str(booking.total) == "560"
+
+
+def test_seat_map_distinguishes_held_and_booked_inventory():
+    bookings = service()
+    held = bookings.hold_seats("show-1", ["A1"])
+    booked_hold = bookings.hold_seats("show-1", ["A2"])
+    bookings.confirm_booking("show-1", booked_hold.id, "Ada Lovelace")
+
+    seat_map = bookings.seat_map("show-1")
+
+    assert held.seats == frozenset({"A1"})
+    assert seat_map["A1"] is SeatStatus.HELD
+    assert seat_map["A2"] is SeatStatus.BOOKED
+    assert seat_map["A3"] is SeatStatus.AVAILABLE
 
 
 def test_same_seat_cannot_be_held_twice():
@@ -47,7 +66,7 @@ def test_hold_cannot_be_confirmed_twice():
     bookings = service()
     hold = bookings.hold_seats("show-1", ["A1"])
     bookings.confirm_booking("show-1", hold.id, "Ada Lovelace")
-    with pytest.raises(NotFoundError):
+    with pytest.raises(HoldNotFoundError):
         bookings.confirm_booking("show-1", hold.id, "Ada Lovelace")
 
 

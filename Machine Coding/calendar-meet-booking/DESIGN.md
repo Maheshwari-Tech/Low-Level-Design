@@ -17,12 +17,13 @@ Time-zone conversion is intentionally out of scope. The API accepts local, offse
 
 ```mermaid
 flowchart LR
-  UI[React demo] --> API[FastAPI adapter]
-  API --> UC[CalendarService]
+  UI[React demo] --> API[FastAPI routes]
+  API --> CONTROLLER[CalendarController]
+  CONTROLLER --> UC[CalendarService]
   UC --> POLICY[SchedulingPolicy]
-  UC --> PORT[CalendarRepository port]
-  PORT --> MEM[InMemoryCalendarRepository]
-  UC --> DOMAIN[Meeting and TimeRange]
+  UC --> REPOSITORY[CalendarRepository]
+  MEM[InMemoryCalendarRepository] -. implements .-> REPOSITORY
+  UC --> DOMAIN[Meeting, Participant, TimeRange]
 ```
 
 The domain and application layers have no dependency on FastAPI or storage details. `main.py` is the composition root and chooses the concrete repository and policy.
@@ -35,9 +36,10 @@ The domain and application layers have no dependency on FastAPI or storage detai
 | `Meeting` | Protect title and participant invariants; answer conflict questions | Query other meetings |
 | `SchedulingPolicy` | Define working hours and availability slot size | Store meetings |
 | `CalendarService` | Normalize commands and orchestrate use cases | Implement locking |
-| `CalendarRepository` | Define required persistence capabilities | Expose storage collections |
+| `CalendarRepository` | Define the required storage operations | Expose storage collections |
 | `InMemoryCalendarRepository` | Atomically check conflicts and insert | Contain presentation logic |
-| HTTP adapter | Validate shape, map errors, serialize responses | Own scheduling rules |
+| `CalendarController` | Serialize public responses | Own scheduling rules |
+| HTTP routes | Validate request shape and map endpoints | Own scheduling rules |
 
 ## 4. Main collaboration
 
@@ -68,7 +70,7 @@ The repository owns the check-and-write atomicity. A service-level `list` follow
 
 - **Value Object:** `TimeRange` is immutable and owns interval semantics.
 - **Policy / Strategy:** `SchedulingPolicy` is injected, so offices with different hours or slot sizes do not require use-case changes.
-- **Repository:** `CalendarRepository` isolates storage and gives the application a small capability-oriented port.
+- **Repository:** `CalendarRepository` isolates storage behind a small contract.
 - **Application Service:** `CalendarService` coordinates domain objects without transport knowledge.
 - **Dependency Inversion:** the service depends on a protocol, while `main.py` supplies the in-memory adapter.
 - **Composition Root:** object construction is centralized rather than hidden in domain classes.
@@ -89,7 +91,7 @@ This is appropriate for an interview-scale data set. At scale, index by particip
 
 ## 7. Concurrency and consistency
 
-The adapter uses one re-entrant lock for reads and writes. This gives a coherent process-local snapshot and prevents two simultaneous schedule commands from both passing conflict detection.
+The adapter uses one lock for reads and writes. This gives a coherent process-local snapshot and prevents two simultaneous schedule commands from both passing conflict detection.
 
 For production:
 

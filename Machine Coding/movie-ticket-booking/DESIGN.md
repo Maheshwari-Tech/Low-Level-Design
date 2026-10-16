@@ -16,12 +16,13 @@ The service models show-level seat inventory with a two-step hold/confirm workfl
 
 ```mermaid
 flowchart LR
-  UI[React demo] --> API[FastAPI adapter]
-  API --> UC[BookingService]
+  UI[React demo] --> API[FastAPI routes]
+  API --> CONTROLLER[BookingController]
+  CONTROLLER --> UC[BookingService]
   UC --> CLOCK[Clock]
   UC --> IDS[ID generators]
-  UC --> PORT[BookingRepository port]
-  PORT --> MEM[InMemoryBookingRepository]
+  UC --> REPOSITORY[BookingRepository]
+  MEM[InMemoryBookingRepository] -. implements .-> REPOSITORY
   UC --> DOMAIN[Show, SeatHold, Booking]
 ```
 
@@ -50,13 +51,13 @@ classDiagram
     +Money total
   }
   class SeatInventory {
-    +SeatId[] held
-    +SeatId[] booked
+    +SeatId[] held_seats
+    +SeatId[] booked_seats
     +status_of(seat) SeatStatus
   }
   class BookingRepository {
     <<protocol>>
-    +unavailable_seats(show_id, now)
+    +get_seat_inventory(show_id, now)
     +save_hold_if_available(hold, now)
     +save_booking_if_hold_active(booking, now)
   }
@@ -109,11 +110,12 @@ The service performs an early check for a useful error, but the repository reval
 
 - **Entity:** `SeatHold` and `Booking` have identity and lifecycle.
 - **Immutable Snapshot:** `SeatInventory` prevents callers from combining independently read held/booked collections.
-- **Repository:** persistence capabilities are expressed through `BookingRepository`.
+- **Repository:** persistence capabilities are expressed through the small `BookingRepository` contract.
 - **Application Service:** `BookingService` orchestrates pricing, expiry, and commands.
 - **Dependency Injection:** repository, clock, duration, and ID generators are supplied from outside.
 - **Lazy Expiration:** expired holds are pruned when inventory is read or a new hold is attempted.
-- **Composition Root:** `main.py` chooses adapters without coupling them to the domain.
+- **Controller:** `BookingController` owns the public JSON representation.
+- **Composition Root:** `main.py` chooses implementations without coupling them to the domain.
 
 ## 7. Complexity
 

@@ -1,5 +1,10 @@
 # Battleship Low-Level Design
 
+This is the implementation design for the scoped 90-minute solution. The
+separate [design decisions](DESIGN_DECISIONS.md) document explains alternatives
+and trade-offs; [production readiness](PRODUCTION_READINESS.md) describes the
+next architecture.
+
 ## 1. Architecture
 
 ```mermaid
@@ -16,7 +21,8 @@ flowchart LR
     BOARD --> SHOT[Shot]
 ```
 
-Dependencies move inward toward the models. Domain models do not import FastAPI, Pydantic, controllers, or repositories.
+Dependencies move toward the application and domain abstractions. Domain models
+do not import FastAPI, Pydantic, controllers, or repositories.
 
 ## 2. Package responsibilities
 
@@ -27,7 +33,7 @@ Dependencies move inward toward the models. Domain models do not import FastAPI,
 | `factories` | Constructs supported ship types from the fleet configuration. |
 | `repositories` | Abstracts where the current game is stored. |
 | `services` | Implements application use cases and coordinates repository access. |
-| `controllers` | Converts domain objects into stable response DTOs. |
+| `controllers` | Converts domain objects into the public JSON representation. |
 | `api` | HTTP schemas, routes, and exception-to-status mapping. |
 | `main.py` | Composition root; creates and wires concrete dependencies. |
 
@@ -92,6 +98,17 @@ stateDiagram-v2
     Won --> PlacingFleet: reset
 ```
 
+The aggregate enforces these invariants:
+
+- A configured ship is placed at most once.
+- Every occupied cell is inside the board.
+- Ships never overlap.
+- Firing starts only after the complete fleet is placed.
+- A cell is targeted at most once.
+- Placement stops after the first valid shot.
+- No command mutates a won game except reset, which creates a new aggregate.
+- Failed commands leave the existing game state unchanged.
+
 ## 5. Request sequence
 
 ```mermaid
@@ -129,6 +146,9 @@ sequenceDiagram
 5. Domain exceptions remain independent of HTTP. The API adapter maps malformed commands to `400` and state conflicts to `409`.
 6. The sample models one game. Supporting many games requires a `game_id` repository key, not changes to `Board`, `Ship`, or shooting rules.
 
+Detailed rationale, rejected alternatives, and the SOLID mapping are in
+[DESIGN_DECISIONS.md](DESIGN_DECISIONS.md).
+
 ## 8. Deliberately out of scope
 
 - Two-player turn orchestration
@@ -141,15 +161,17 @@ These are extension points, not missing responsibilities in the scoped aggregate
 
 ## 9. Complexity
 
-For board width `N` and fleet cell count `F`:
+Let `S` be the number of ships and `L` the size of the ship being placed.
 
-| Operation | Time | Space |
+| Operation | Time | Space added |
 |---|---:|---:|
-| Place a ship of length `L` | `O(F + L)` | `O(L)` |
-| Fire | `O(number of ships × average ship length)` | `O(1)` plus stored shot |
-| Serialize game | `O(F + shots)` | `O(F + shots)` response |
+| Place ship | `O(S × average_ship_size + L)` | `O(L)` |
+| Fire | `O(S × average_ship_size)` | `O(1)` |
+| Check win | `O(S)` | `O(1)` |
 
-An `N × N` cell index could make hit lookup constant time, but the current representation is clearer for an 8×8 interview board. The design documents the optimization boundary without paying its complexity early.
+For an 8×8 board and three ships, the simple scans are easier to verify than a
+second occupancy index. If fleet size becomes large, `Board` can maintain a
+`Cell -> Ship` index for constant-time hit lookup.
 
 ## 10. Production evolution
 

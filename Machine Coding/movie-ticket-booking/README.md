@@ -4,6 +4,19 @@ Independent machine-coding solution focused on inventory consistency and a two-s
 
 Read [PROBLEM.md](PROBLEM.md) first, followed by [DESIGN.md](DESIGN.md).
 
+## Backend structure
+
+```text
+backend/app/
+├── api/             # Routes, request schemas, error-to-HTTP mapping
+├── controllers/     # Public response mapping
+├── exceptions/      # Named booking failures
+├── models/          # Show, hold, booking, inventory, seat status
+├── repositories/    # Storage contract and in-memory implementation
+├── services/        # Booking use cases
+└── main.py          # Dependency composition
+```
+
 ## Run
 
 ```bash

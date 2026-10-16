@@ -4,6 +4,19 @@ Independent machine-coding solution focused on interval modeling and participant
 
 Read [PROBLEM.md](PROBLEM.md) first, followed by [DESIGN.md](DESIGN.md).
 
+## Backend structure
+
+```text
+backend/app/
+├── api/             # Routes, request schemas, error-to-HTTP mapping
+├── controllers/     # Public response mapping
+├── exceptions/      # Scheduling failures
+├── models/          # Meeting, participant, time range, slots, policy
+├── repositories/    # Storage contract and in-memory implementation
+├── services/        # Calendar use cases
+└── main.py          # Dependency composition
+```
+
 ## Run
 
 ```bash

@@ -1,12 +1,14 @@
-from datetime import date, datetime
 from concurrent.futures import ThreadPoolExecutor
+from datetime import date, datetime
 from threading import Barrier
 
 import pytest
 
-from app.application import CalendarService
-from app.domain import CalendarError, MeetingConflictError
-from app.infrastructure import InMemoryCalendarRepository
+from app.exceptions.calendar_exceptions import CalendarError, MeetingConflictError
+from app.repositories.in_memory_calendar_repository import (
+    InMemoryCalendarRepository,
+)
+from app.services.calendar_service import CalendarService
 
 
 def test_touching_meetings_do_not_conflict():
@@ -43,11 +45,30 @@ def test_shared_participant_cannot_have_overlapping_meetings():
         )
 
 
+def test_disjoint_participants_may_have_overlapping_meetings():
+    service = CalendarService(InMemoryCalendarRepository())
+    service.schedule(
+        "First",
+        ["ada@example.com"],
+        datetime(2026, 9, 22, 10),
+        datetime(2026, 9, 22, 10, 30),
+    )
+
+    second = service.schedule(
+        "Second",
+        ["grace@example.com"],
+        datetime(2026, 9, 22, 10, 15),
+        datetime(2026, 9, 22, 10, 45),
+    )
+
+    assert second.title == "Second"
+
+
 def test_availability_returns_sixteen_half_hour_slots():
     service = CalendarService(InMemoryCalendarRepository())
     slots = service.availability(date(2026, 9, 22), ["ada@example.com"])
     assert len(slots) == 16
-    assert all(available for _, available in slots)
+    assert all(slot.available for slot in slots)
 
 
 def test_participant_identity_is_normalized_before_conflict_check():
